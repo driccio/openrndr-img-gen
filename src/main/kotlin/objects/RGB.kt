@@ -2,6 +2,8 @@ package objects
 
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.random.Random
 
 data class RGB(
@@ -15,10 +17,12 @@ data class RGB(
         val BLACK = RGB(0, 0, 0, 1.0)
     }
 
+    private fun vary(color: Int, seed: Int) = min(max(0, color + Random.nextInt(-seed, seed)), 255)
+
     fun vary(seed: Int) = RGB(
-        (this.r + Random.nextInt(-seed, seed)) % 256,
-        (this.g + Random.nextInt(-seed, seed)) % 256,
-        (this.b + Random.nextInt(-seed, seed)) % 256,
+        vary(this.r, seed),
+        vary(this.g, seed),
+        vary(this.b, seed),
         this.alpha
     )
 
