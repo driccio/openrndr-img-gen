@@ -49,7 +49,7 @@ fun main() = application {
 
             drawer.image(colorBuffer)
 
-            saveAsImage(colorBuffer, "rainbow-waves", null)
+            saveAsImage(colorBuffer, "diamond-square", null)
         }
     }
 }
