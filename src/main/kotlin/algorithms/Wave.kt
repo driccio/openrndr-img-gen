@@ -10,10 +10,13 @@ import java.security.SecureRandom
 
 // Fully inspired by https://openrndr.discourse.group/t/openrndr-processing-noise-fields-leaving-trails/215
 
-fun Program.waves(matrixSize: Int) {
-    val iterations = 500
-    val nbOfPoints = 60
+private val logger = KotlinLogging.logger {}
+
 fun Program.waves(iterations: Int, nbOfPoints: Int) {
+    logger.info("Waves configuration :")
+    logger.info("- iterations: $iterations")
+    logger.info("- nb of points: $nbOfPoints")
+
     val zoom = 0.02
     val waveLength = (drawer.bounds.width * 1.5).toInt()//kotlin.random.Random.nextInt(300, 1000)
 
@@ -43,5 +46,7 @@ fun Program.waves(iterations: Int, nbOfPoints: Int) {
                 }
             }
         }
+
+        logger.debug("Progression: ${it/iterations.toDouble() * 100}%")
     }
 }
