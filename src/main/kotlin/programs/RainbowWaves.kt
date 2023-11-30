@@ -11,9 +11,8 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.compositor.*
 import org.openrndr.extra.fx.blend.SourceAtop
 import org.openrndr.extra.fx.blur.ApproximateGaussianBlur
-import utils.filename
-import kotlin.io.path.Path
 import org.openrndr.extra.noise.Random
+import utils.saveAsImage
 import kotlin.math.pow
 
 fun main() = application {
@@ -59,15 +58,9 @@ fun main() = application {
         }
 
         extend {
-            // draw the composite
             composite.draw(drawer)
 
-            composite.result.saveToFile(
-                Path("./generated/" + filename("rainbow-waves", "png")).toFile(),
-                ImageFileFormat.PNG
-            )
+            saveAsImage(composite.result, "rainbow-waves", waveConfiguration.toString())
         }
     }
 }
-
-
