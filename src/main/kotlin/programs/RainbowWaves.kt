@@ -1,5 +1,6 @@
 package programs
 
+import algorithms.WaveConfiguration
 import algorithms.diamondSquare
 import algorithms.waves
 import objects.Matrix
@@ -7,12 +8,12 @@ import objects.print
 import org.openrndr.PresentationMode
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.ImageFileFormat
 import org.openrndr.extra.compositor.*
 import org.openrndr.extra.fx.blend.SourceAtop
 import org.openrndr.extra.fx.blur.ApproximateGaussianBlur
 import utils.filename
 import kotlin.io.path.Path
+import org.openrndr.extra.noise.Random
 import kotlin.math.pow
 
 fun main() = application {
@@ -28,7 +29,9 @@ fun main() = application {
 
     program {
         window.presentationMode = PresentationMode.MANUAL
-        backgroundColor = ColorRGBa.WHITE
+        backgroundColor = ColorRGBa.BLACK
+
+        val waveConfiguration = WaveConfiguration(100, 80, 0.04, Random::simplex)
 
         val composite = compose {
             layer {
@@ -45,7 +48,7 @@ fun main() = application {
                 //blend(DestinationAtop())
 
                 draw {
-                    waves( 200, 100)
+                    waves(waveConfiguration)
                 }
 
                 post(ApproximateGaussianBlur()) {
