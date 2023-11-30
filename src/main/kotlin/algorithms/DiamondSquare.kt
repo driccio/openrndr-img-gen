@@ -4,15 +4,21 @@ import objects.Matrix
 import objects.RGB
 import objects.median
 
-fun Matrix.diamondSquare(diamondVariation: Int, squareVariation: Int): Matrix {
+
+private fun initCorners(matrix: Matrix) {
+    matrix
+        .set(0, 0, RGB())
+        .set(0, matrix.ySize - 1, RGB())
+        .set(matrix.xSize - 1, 0, RGB())
+        .set(matrix.xSize - 1, matrix.ySize - 1, RGB())
+}
+
+fun Matrix.diamondSquare(diamondVariation: Int, squareVariation: Int,
+                         initCorners: (Matrix) -> Unit = ::initCorners): Matrix {
     val matrixSize: Int = this.xSize
     var step: Int = matrixSize - 1
 
-    this
-        .set(0, 0, RGB())
-        .set(0, matrixSize - 1, RGB())
-        .set(matrixSize - 1, 0, RGB())
-        .set(matrixSize - 1, matrixSize - 1, RGB())
+    initCorners(this)
 
     while (step > 1) {
         val centroidStep: Int = step / 2
