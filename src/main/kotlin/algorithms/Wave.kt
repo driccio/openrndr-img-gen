@@ -34,17 +34,17 @@ fun Program.waves(iterations: Int, nbOfPoints: Int) {
         val time = seconds + (it)
 
         positions.forEach { position ->
-            var pos = position.copy(y = position.y + kotlin.random.Random.nextDouble(-10.0, 10.0))
+            val pos = position.copy(y = position.y + kotlin.random.Random.nextDouble(-5.0, 5.0))
 
-            repeat(length) {
-                if (drawer.bounds.contains(pos)) {
-                    drawer.point(pos.x, pos.y)
-
-                    pos += Polar(
-                        180 * Random.simplex(pos.vector3(z = time) * zoom)
+            val points = generateSequence(pos) {
+                    it + Polar(
+                        180 * Random.simplex(it.vector3(z = time) * zoom)
                     ).cartesian
                 }
-            }
+                .take(waveLength)
+                .toList()
+
+            drawer.points(points)
         }
 
         logger.debug("Progression: ${it/iterations.toDouble() * 100}%")
