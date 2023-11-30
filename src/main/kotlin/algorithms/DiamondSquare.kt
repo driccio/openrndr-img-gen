@@ -3,7 +3,7 @@ package algorithms
 import objects.Matrix
 import objects.RGB
 import objects.median
-
+import kotlin.math.max
 
 private fun initCorners(matrix: Matrix) {
     matrix
@@ -15,8 +15,7 @@ private fun initCorners(matrix: Matrix) {
 
 fun Matrix.diamondSquare(diamondVariation: Int, squareVariation: Int,
                          initCorners: (Matrix) -> Unit = ::initCorners): Matrix {
-    val matrixSize: Int = this.xSize
-    var step: Int = matrixSize - 1
+    var step: Int = max(xSize, ySize) - 1
 
     initCorners(this)
 
@@ -24,8 +23,8 @@ fun Matrix.diamondSquare(diamondVariation: Int, squareVariation: Int,
         val centroidStep: Int = step / 2
 
         // Diamond
-        for (x in centroidStep until matrixSize step step) {
-            for (y in centroidStep until matrixSize step step) {
+        for (x in centroidStep until xSize step step) {
+            for (y in centroidStep until ySize step step) {
                 this.set(x, y, this.diamond(x, y, centroidStep).median().vary(diamondVariation))
             }
         }
@@ -33,21 +32,21 @@ fun Matrix.diamondSquare(diamondVariation: Int, squareVariation: Int,
         // Square
         var d = 0
 
-        for (x in 0 until matrixSize step centroidStep) {
+        for (x in 0 until xSize step centroidStep) {
             if (d == 0) {
                 d = centroidStep;
             } else {
                 d = 0;
             }
 
-            for (y in d until matrixSize step step) {
+            for (y in d until ySize step step) {
                 var rgbs: Array<RGB> = arrayOf()
 
                 if (x >= centroidStep) {
                     rgbs += this.get(x - centroidStep, y)!!
                 }
 
-                if (x + centroidStep < matrixSize) {
+                if (x + centroidStep < xSize) {
                     rgbs += this.get(x + centroidStep, y)!!
                 }
 
@@ -55,7 +54,7 @@ fun Matrix.diamondSquare(diamondVariation: Int, squareVariation: Int,
                     rgbs += this.get(x, y - centroidStep)!!
                 }
 
-                if (y + centroidStep < matrixSize) {
+                if (y + centroidStep < ySize) {
                     rgbs += this.get(x, y + centroidStep)!!
                 }
 
@@ -69,9 +68,24 @@ fun Matrix.diamondSquare(diamondVariation: Int, squareVariation: Int,
     return this
 }
 
-fun Matrix.diamond(x: Int, y: Int, step: Int): Array<RGB> = arrayOf(
-    this.get(x-step, y-step)!!,
-    this.get(x+step, y-step)!!,
-    this.get(x-step, y+step)!!,
-    this.get(x+step, y+step)!!
-)
+fun Matrix.diamond(x: Int, y: Int, step: Int): Array<RGB> {
+    var rgbs: Array<RGB> = arrayOf()
+
+    if (this.exists(x-step, y-step)) {
+        rgbs += this.get(x-step, y-step)!!
+    }
+
+    if (this.exists(x+step, y-step)) {
+        rgbs += this.get(x+step, y-step)!!
+    }
+
+    if (this.exists(x-step, y+step)) {
+        rgbs += this.get(x-step, y+step)!!
+    }
+
+    if (this.exists(x+step, y+step)) {
+        rgbs += this.get(x+step, y+step)!!
+    }
+
+    return rgbs
+}

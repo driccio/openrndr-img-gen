@@ -15,6 +15,8 @@ data class Matrix(
         this.rgbs[x][y] = value
         return this
     }
+
+    fun exists(x: Int, y: Int): Boolean = x < xSize && y < ySize && this.get(x, y) != null
 }
 
 fun Drawer.print(matrix: Matrix) {
