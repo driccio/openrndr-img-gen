@@ -2,11 +2,12 @@ package programs
 
 import algorithms.diamondSquare
 import objects.Matrix
-import objects.RGB
 import objects.print
 import org.openrndr.PresentationMode
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
+import org.openrndr.drawImage
+import utils.saveAsImage
 import kotlin.math.pow
 
 fun main() = application {
@@ -39,7 +40,16 @@ fun main() = application {
         backgroundColor = ColorRGBa.WHITE
 
         extend {
-            drawer.print(matrix)
+            val colorBuffer = drawImage(
+                width = matrix.xSize,
+                height = matrix.ySize
+            ) {
+                drawer.print(matrix)
+            }
+
+            drawer.image(colorBuffer)
+
+            saveAsImage(colorBuffer, "rainbow-waves", null)
         }
     }
 }
