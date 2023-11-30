@@ -1,5 +1,6 @@
 package algorithms
 
+import mu.KotlinLogging
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.noise.Random
@@ -12,14 +13,15 @@ import java.security.SecureRandom
 fun Program.waves(matrixSize: Int) {
     val iterations = 500
     val nbOfPoints = 60
+fun Program.waves(iterations: Int, nbOfPoints: Int) {
     val zoom = 0.02
-    val length = (matrixSize * 1.5).toInt()//kotlin.random.Random.nextInt(300, 1000)
+    val waveLength = (drawer.bounds.width * 1.5).toInt()//kotlin.random.Random.nextInt(300, 1000)
 
     val random = SecureRandom()
     val positions = (0..nbOfPoints).map {
         Vector2(
             0.0,
-            random.nextDouble(0.0, matrixSize.toDouble())
+            random.nextDouble(0.0, drawer.bounds.width)
         )
     }
 

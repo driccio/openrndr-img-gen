@@ -45,7 +45,7 @@ fun main() = application {
                 //blend(DestinationAtop())
 
                 draw {
-                    waves(matrixSize)
+                    waves( 200, 100)
                 }
 
                 post(ApproximateGaussianBlur()) {
