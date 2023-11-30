@@ -3,10 +3,12 @@ package algorithms
 import mu.KotlinLogging
 import org.openrndr.Program
 import org.openrndr.color.ColorRGBa
+import org.openrndr.extra.noise.Random
 import org.openrndr.math.Polar
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
 import java.security.SecureRandom
+import java.time.Clock
 
 // Fully inspired by https://openrndr.discourse.group/t/openrndr-processing-noise-fields-leaving-trails/215
 
@@ -25,13 +27,15 @@ data class WaveConfiguration(val iterations: Int,
 fun Program.waves(configuration: WaveConfiguration ) {
     logger.info("Waves configuration : $configuration")
 
+    // We want non-deterministic random.
+    Random.seed = "" + Clock.systemUTC().instant().toEpochMilli()
+
     val waveLength = (drawer.bounds.width * 1.5).toInt()//kotlin.random.Random.nextInt(300, 1000)
 
-    val random = SecureRandom()
     val positions = (0..configuration.nbOfPoints).map {
         Vector2(
             0.0,
-            random.nextDouble(0.0, drawer.bounds.width)
+            Random.double(0.0, drawer.bounds.width)
         )
     }
 
@@ -41,19 +45,19 @@ fun Program.waves(configuration: WaveConfiguration ) {
         val time = seconds + (it)
 
         positions.forEach { position ->
-            val pos = position.copy(y = position.y + kotlin.random.Random.nextDouble(-5.0, 5.0))
+            val pos = position.copy(y = position.y + Random.double(-5.0, 5.0))
 
             val points = generateSequence(pos) {
-                    it + Polar(
-                        180 * configuration.randomAlgorithm(it.vector3(z = time) * configuration.zoom)
-                    ).cartesian
-                }
+                it + Polar(
+                    180 * configuration.randomAlgorithm(it.vector3(z = time) * configuration.zoom)
+                ).cartesian
+            }
                 .take(waveLength)
                 .toList()
 
             drawer.points(points)
         }
 
-        logger.debug("Progression: ${it/configuration.iterations.toDouble() * 100}%")
+        logger.debug("Progression: ${it / configuration.iterations.toDouble() * 100}%")
     }
 }
