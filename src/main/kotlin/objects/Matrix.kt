@@ -1,6 +1,9 @@
 package objects
 
 import org.openrndr.draw.Drawer
+import utils.toColorBuffer
+import java.awt.image.BufferedImage
+
 
 data class Matrix(
     val xSize: Int,
@@ -20,10 +23,17 @@ data class Matrix(
 }
 
 fun Drawer.print(matrix: Matrix) {
-    matrix.rgbs.forEachIndexed { x, otherRgbs ->
-        otherRgbs.filterNotNull().forEachIndexed { y, rgb ->
-            this.fill(rgb)
-            this.point(x.toDouble(), y.toDouble())
+    val image = BufferedImage(matrix.xSize, matrix.ySize, BufferedImage.TYPE_INT_ARGB)
+
+    for (x in 0 until matrix.xSize) {
+        for (y in 0 until matrix.ySize) {
+            val rgb = matrix.get(x, y)
+
+            if (rgb != null) {
+                image.setRGB(x, y, rgb.intRGB)
+            }
         }
     }
+
+    this.image(image.toColorBuffer())
 }

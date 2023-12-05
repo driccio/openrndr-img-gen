@@ -7,6 +7,7 @@ import objects.print
 import org.openrndr.PresentationMode
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.colorBuffer
 import org.openrndr.drawImage
 import utils.saveAsImage
 import kotlin.math.pow

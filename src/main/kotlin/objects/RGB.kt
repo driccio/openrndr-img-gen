@@ -12,6 +12,13 @@ data class RGB(
     val b: Int = Random.nextInt(255),
     val alpha: Double = 1.0
 ) {
+    val intRGB: Int by lazy {
+        (alpha * 255).toInt() and 0xFF shl 24 or
+                (r and 0xFF shl 16) or
+                (g and 0xFF shl 8) or
+                (b and 0xFF shl 0)
+    }
+
     companion object {
         val WHITE = RGB(255, 255, 255, 1.0)
         val BLACK = RGB(0, 0, 0, 1.0)
